@@ -1,0 +1,2 @@
+cloudplaylists-core
+===================
