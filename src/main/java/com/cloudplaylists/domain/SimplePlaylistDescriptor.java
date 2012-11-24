@@ -26,7 +26,10 @@ public class SimplePlaylistDescriptor implements PlaylistDescriptor {
 	private String name;
 	private String displayName;
 	private String userName;
+	private String url;
 
+	public SimplePlaylistDescriptor() {}
+	
 	public SimplePlaylistDescriptor(String userName, String name,
 			String displayName) {
 		this.userName = userName;
@@ -61,8 +64,12 @@ public class SimplePlaylistDescriptor implements PlaylistDescriptor {
 	@SuppressWarnings("deprecation")
 	@Override
 	public String getUrl() {
-		return "http://cloudplaylists.com/" + URLEncoder.encode(getUserName())
+		return url != null ? url : "http://cloudplaylists.com/" + URLEncoder.encode(getUserName())
 				+ "/" + name;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 }
