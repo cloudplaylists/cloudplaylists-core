@@ -40,6 +40,7 @@ public class Application {
 	private String name;
 
 	@JsonIgnore
+	@Column(columnDefinition = "tinyint", nullable = false)
 	private boolean trusted;
 
 	@NaturalId

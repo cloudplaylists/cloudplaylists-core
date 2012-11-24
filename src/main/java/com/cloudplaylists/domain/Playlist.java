@@ -37,7 +37,7 @@ import org.hibernate.annotations.GenericGenerator;
  * 
  */
 @Entity(name = "Playlist")
-public class Playlist {
+public class Playlist implements PlaylistDescriptor {
 
 	@Id
 	@GeneratedValue(generator = "system-uuid")
