@@ -1,4 +1,5 @@
 package com.cloudplaylists.domain;
+
 /*
  * Copyright 2012 the original author or authors.
  *
@@ -15,156 +16,70 @@ package com.cloudplaylists.domain;
  * limitations under the License.
  */
 import java.net.URLEncoder;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.GenericGenerator;
+
 /**
  * @author Michael Lavelle
  * 
  */
 @Entity(name = "Playlist")
-public class Playlist implements PlaylistDescriptor {
+public class Playlist extends PlaylistDescriptor {
 
-	@Id
-	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name = "system-uuid", strategy = "uuid")
-	@Column(updatable = false, nullable = false)
-	private String id;
-
-	private String name;
-
-	@ManyToMany(fetch = FetchType.EAGER, targetEntity = PlaylistMedia.class, cascade = {
-			CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
+	@ManyToMany(fetch = FetchType.LAZY, targetEntity = Media.class, cascade = {
+			CascadeType.PERSIST, CascadeType.MERGE })
 	@org.hibernate.annotations.IndexColumn(name = "position")
-	@Cascade({ org.hibernate.annotations.CascadeType.ALL })
+	@JoinTable(name = "Playlist_PlaylistMedia", joinColumns = @JoinColumn(name = "Playlist_id"), inverseJoinColumns = @JoinColumn(name = "playlistMedia_url"))
 	// @Size(min=1,message="{tracks.empty}")
-	private List<PlaylistMedia> playlistMedia;
+	private List<Media> media;
 
 	@ManyToOne
 	@JoinColumn(name = "userName")
 	@JsonIgnore
 	private User user;
 
-	@Transient
-	private String userName;
-	
-	@Transient
-	private String url;
-
-	@Column(columnDefinition = "tinyint", nullable = false)
-	private boolean privatePlaylist;
-	@Column(columnDefinition = "tinyint", nullable = false)
-	@JsonIgnore
-	private boolean deleted;
-	@Column(columnDefinition = "tinyint", nullable = false)
-	private boolean hideOnProfile;
-	private Date addedDate;
-
-	public String getUserName() {
-		return user == null ? userName : user.getUserName();
-	}
-
 	@SuppressWarnings("deprecation")
 	public String getUrl() {
-		return url != null ? url : ("http://cloudplaylists.com/" + URLEncoder.encode(getUserName()) + "/" + name);
+		return url != null ? url : ("http://cloudplaylists.com/"
+				+ URLEncoder.encode(getUserName()) + "/" + name);
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public Playlist() {
 	}
 
+	public Playlist(Playlist playlist) {
+		super(playlist);
+		this.user = playlist.getUser();
+		this.media = playlist.getMedia();
+	}
 
-
-	public void setUserName(String userName) {
-		this.userName = userName;
+	@Override
+	public String getUserName() {
+		return user != null ? user.getUserName() : userName;
 	}
 
 	public User getUser() {
 		return user;
 	}
 
-	public boolean isPrivatePlaylist() {
-		return privatePlaylist;
+	public List<Media> getMedia() {
+		return media;
 	}
 
-	public void setPrivatePlaylist(boolean privatePlaylist) {
-		this.privatePlaylist = privatePlaylist;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
-
-	public boolean isHideOnProfile() {
-		return hideOnProfile;
-	}
-
-	public void setHideOnProfile(boolean hideOnProfile) {
-		this.hideOnProfile = hideOnProfile;
-	}
-
-	public Date getAddedDate() {
-		return addedDate;
-	}
-
-	public void setAddedDate(Date addedDate) {
-		this.addedDate = addedDate;
-	}
-
-	public String getDisplayName() {
-		return displayName;
-	}
-
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
-	}
-
-	private String displayName;
-
-	public List<PlaylistMedia> getPlaylistMedia() {
-		return playlistMedia;
-	}
-
-	public void setPlaylistMedia(List<PlaylistMedia> playlistMedia) {
-		this.playlistMedia = playlistMedia;
+	public void setMedia(List<Media> media) {
+		this.media = media;
 	}
 
 	public void setUser(User user) {
 		this.user = user;
 	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 }

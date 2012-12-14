@@ -1,4 +1,5 @@
 package com.cloudplaylists.domain;
+
 /*
  * Copyright 2012 the original author or authors.
  *
@@ -14,15 +15,142 @@ package com.cloudplaylists.domain;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.net.URLEncoder;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.GenericGenerator;
+
 /**
  * @author Michael Lavelle
  * 
  */
-public interface PlaylistDescriptor {
-	
-	public String getUserName();
-	public String getUrl();
-	public String getName();
-	public String getDisplayName();	
+@MappedSuperclass
+public class PlaylistDescriptor {
+
+	@Id
+	@GeneratedValue(generator = "system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid")
+	@Column(updatable = false, nullable = false)
+	private String id;
+
+	protected String name;
+
+	protected String displayName;
+
+	@Column(insertable = false, updatable = false)
+	protected String userName;
+
+	@Transient
+	protected String url;
+
+	@Column(columnDefinition = "tinyint", nullable = false)
+	private boolean privatePlaylist;
+	@Column(columnDefinition = "tinyint", nullable = false)
+	@JsonIgnore
+	private boolean deleted;
+	@Column(columnDefinition = "tinyint", nullable = false)
+	private boolean hideOnProfile;
+	private Date addedDate;
+
+	public PlaylistDescriptor() {
+	}
+
+	public PlaylistDescriptor(String userName, String name, String displayName) {
+		this.userName = userName;
+		this.name = name;
+		this.displayName = displayName;
+	}
+
+	public PlaylistDescriptor(PlaylistDescriptor descriptor) {
+		this.name = descriptor.getName();
+		this.displayName = descriptor.getDisplayName();
+		this.addedDate = descriptor.getAddedDate();
+		this.hideOnProfile = descriptor.isHideOnProfile();
+		this.deleted = descriptor.isDeleted();
+		this.id = descriptor.getId();
+		this.url = descriptor.getUrl();
+		this.userName = descriptor.getUserName();
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public boolean isPrivatePlaylist() {
+		return privatePlaylist;
+	}
+
+	public void setPrivatePlaylist(boolean privatePlaylist) {
+		this.privatePlaylist = privatePlaylist;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	public boolean isHideOnProfile() {
+		return hideOnProfile;
+	}
+
+	public void setHideOnProfile(boolean hideOnProfile) {
+		this.hideOnProfile = hideOnProfile;
+	}
+
+	public Date getAddedDate() {
+		return addedDate;
+	}
+
+	public void setAddedDate(Date addedDate) {
+		this.addedDate = addedDate;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+	}
+
+	@SuppressWarnings("deprecation")
+	public String getUrl() {
+		return url != null ? url : "http://cloudplaylists.com/"
+				+ URLEncoder.encode(getUserName()) + "/" + name;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
 }

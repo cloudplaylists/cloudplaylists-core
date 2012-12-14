@@ -38,8 +38,8 @@ public class Media {
 	public String getEncodedUrl() {
 		return URLEncoder.encode(getUrl());
 	}
-
-	public String getUrl() {
+	
+    public String getUrl() {
 		return url;
 	}
 

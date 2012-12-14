@@ -38,18 +38,6 @@ public class PlaylistMedia {
 	@JoinColumn(name = "url", insertable = false, updatable = false)
 	private Media media;
 
-	@ManyToOne
-	private Playlist playlist;
-
-	@JsonIgnore
-	public Playlist getPlaylist() {
-		return playlist;
-	}
-
-	public void setPlaylist(Playlist playlist) {
-		this.playlist = playlist;
-	}
-
 	private String addedBy;
 
 	@SuppressWarnings("deprecation")
