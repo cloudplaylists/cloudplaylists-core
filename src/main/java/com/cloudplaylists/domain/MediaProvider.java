@@ -1,6 +1,4 @@
 package com.cloudplaylists.domain;
-
-
 /*
  * Copyright 2012 the original author or authors.
  *
@@ -18,36 +16,25 @@ package com.cloudplaylists.domain;
  */
 /**
  * @author Michael Lavelle
- * 
  */
-public class CloudPlaylistsProfile {
+public enum MediaProvider {
 
-	private String userName;
-	private String displayName;
-	private String profileUrl;
-
-	public String getProfileUrl() {
-		return profileUrl;
+	SOUNDCLOUD("soundcloud"),LASTFM("lastfm"),EXFM("exfm");
+	
+	private final String providerId;
+	
+	MediaProvider(String providerId)
+	{
+		this.providerId = providerId;
 	}
-
-	public void setProfileUrl(String profileUrl) {
-		this.profileUrl = profileUrl;
+	
+	public String providerId()
+	{
+		return providerId;
 	}
-
-	public String getUserName() {
-		return userName;
+	
+	public static MediaProvider fromProviderId(String providerId)
+	{
+		return valueOf(MediaProvider.class,providerId.toUpperCase());
 	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getDisplayName() {
-		return displayName;
-	}
-
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
-	}
-
 }

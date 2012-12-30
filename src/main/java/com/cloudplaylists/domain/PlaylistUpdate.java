@@ -15,7 +15,9 @@ package com.cloudplaylists.domain;
  * limitations under the License.
  */
 import java.util.List;
-
+/**
+ * @author Michael Lavelle
+ */
 public class PlaylistUpdate {
 
 	private String name;

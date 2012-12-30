@@ -16,9 +16,17 @@ package com.cloudplaylists.domain;
  */
 import java.net.URLEncoder;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.MapKeyColumn;
+import javax.persistence.OneToMany;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 /**
@@ -28,10 +36,50 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @Entity(name = "Media")
 public class Media {
 
+	public MediaProvider getMediaProvider() {
+		return mediaProvider;
+	}
+
+	public void setMediaProvider(MediaProvider mediaProvider) {
+		this.mediaProvider = mediaProvider;
+	}
+
 	@Id
 	private String url;
 	private Date addedDate;
 	private String title;
+
+	
+    @JsonIgnore
+	public Map<MediaProvider, LinkedMedia> getLinkedMedia() {
+		return linkedMedia;
+	}
+    
+    public Set<MediaProvider> getProviderIds()
+    {
+    	Set<MediaProvider> providers = new HashSet<MediaProvider>();
+    	providers.addAll(linkedMedia.keySet());
+    	providers.add(getMediaProvider());
+    	return providers;
+    }
+
+	@OneToMany(mappedBy="sourceMedia",fetch=FetchType.EAGER)
+    @MapKeyColumn(name="linkedProviderId")	
+    @JsonIgnore
+	private Map<MediaProvider,LinkedMedia> linkedMedia = new HashMap<MediaProvider,LinkedMedia>();
+	
+	@Column(columnDefinition="int(11) not null default 0")
+	private MediaProvider mediaProvider;
+	
+	private String providerMediaId;
+	
+	public String getProviderMediaId() {
+		return providerMediaId;
+	}
+
+	public void setProviderMediaId(String providerMediaId) {
+		this.providerMediaId = providerMediaId;
+	}
 
 	@SuppressWarnings("deprecation")
 	@JsonIgnore
