@@ -48,9 +48,23 @@ public class Media {
 	private String url;
 	private Date addedDate;
 	private String title;
+	@Column(columnDefinition = "tinyint", nullable = true)
+	private Boolean deadLink;
 
 	
-    @JsonIgnore
+    public void setLinkedMedia(Map<MediaProvider, LinkedMedia> linkedMedia) {
+		this.linkedMedia = linkedMedia;
+	}
+
+	public Boolean getDeadLink() {
+		return deadLink;
+	}
+
+	public void setDeadLink(Boolean deadLink) {
+		this.deadLink = deadLink;
+	}
+
+	@JsonIgnore
 	public Map<MediaProvider, LinkedMedia> getLinkedMedia() {
 		return linkedMedia;
 	}

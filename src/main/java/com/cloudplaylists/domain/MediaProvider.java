@@ -19,7 +19,7 @@ package com.cloudplaylists.domain;
  */
 public enum MediaProvider {
 
-	SOUNDCLOUD("soundcloud"),LASTFM("lastfm"),EXFM("exfm");
+	SOUNDCLOUD("soundcloud"),LASTFM("lastfm"),EXFM("exfm"),SPOTIFY("spotify");
 	
 	private final String providerId;
 	
