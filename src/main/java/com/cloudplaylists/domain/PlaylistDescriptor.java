@@ -34,7 +34,7 @@ import org.hibernate.annotations.GenericGenerator;
 @MappedSuperclass
 public class PlaylistDescriptor {
 
-	@Id
+	@Id 
 	@GeneratedValue(generator = "system-uuid")
 	@GenericGenerator(name = "system-uuid", strategy = "uuid")
 	@Column(updatable = false, nullable = false)
@@ -43,6 +43,25 @@ public class PlaylistDescriptor {
 	protected String name;
 
 	protected String displayName;
+	
+	public void setPlaylistVisibility(PlaylistVisibility playlistVisibility) {
+		
+		switch (playlistVisibility)
+		{
+			case PRIVATE : setPrivatePlaylist(true);
+			case PUBLIC_DISPLAYED_ON_PROFILE : 
+			{
+				this.setPrivatePlaylist(false);
+				this.setHideOnProfile(false);
+			}
+			case PUBLIC_HIDDEN_ON_PROFILE :
+			{
+				this.setPrivatePlaylist(false);
+				this.setHideOnProfile(true);
+			}
+		}
+	}
+
 
 	@Column(insertable = false, updatable = false)
 	protected String userName;
@@ -77,6 +96,13 @@ public class PlaylistDescriptor {
 		this.id = descriptor.getId();
 		this.url = descriptor.getUrl();
 		this.userName = descriptor.getUserName();
+		this.privatePlaylist = descriptor.isPrivatePlaylist();
+	}
+	
+	public PlaylistVisibility getPlaylistVisibility()
+	{
+		return  isPrivatePlaylist() ? PlaylistVisibility.PRIVATE :
+			 (isHideOnProfile() ? PlaylistVisibility.PUBLIC_HIDDEN_ON_PROFILE : PlaylistVisibility.PUBLIC_DISPLAYED_ON_PROFILE);
 	}
 
 	public String getId() {

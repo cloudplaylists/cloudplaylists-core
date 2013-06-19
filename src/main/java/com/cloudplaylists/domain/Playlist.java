@@ -49,8 +49,8 @@ public class Playlist extends PlaylistDescriptor {
 
 	@SuppressWarnings("deprecation")
 	public String getUrl() {
-		return url != null ? url : ("http://cloudplaylists.com/"
-				+ URLEncoder.encode(getUserName()) + "/" + name);
+		return url != null ? url : (getUserName() == null ? ("http://cloudplaylists.com/viewPlaylist?id=" + getId()) : ("http://cloudplaylists.com/"
+				+ URLEncoder.encode(getUserName()) + "/" + name));
 	}
 
 	public Playlist() {

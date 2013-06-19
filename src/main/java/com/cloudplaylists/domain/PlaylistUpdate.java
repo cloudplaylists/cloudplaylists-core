@@ -14,6 +14,8 @@ package com.cloudplaylists.domain;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 /**
  * @author Michael Lavelle
@@ -21,6 +23,48 @@ import java.util.List;
 public class PlaylistUpdate {
 
 	private String name;
+	private PlaylistVisibility playlistVisibility;
+	
+	public PlaylistVisibility getPlaylistVisibility() {
+		return playlistVisibility;
+	}
+
+	public void setPlaylistVisibility(PlaylistVisibility playlistVisibility) {
+		this.playlistVisibility = playlistVisibility;
+	}
+
+	public PlaylistUpdate()
+	{
+		this.urls = new ArrayList<String>();
+		this.playlistVisibility = PlaylistVisibility.PUBLIC_DISPLAYED_ON_PROFILE;
+	}
+	
+	public PlaylistUpdate(String name)
+	{
+		this.urls = new ArrayList<String>();
+		this.name = name;
+	}
+	
+	public PlaylistUpdate(String name,PlaylistVisibility playlistVisibility)
+	{
+		this.urls = new ArrayList<String>();
+		this.name = name;
+		this.playlistVisibility = playlistVisibility;
+	}
+	
+	public PlaylistUpdate(String name,String[] urls)
+	{
+		this.urls = Arrays.asList(urls);
+		this.name = name;
+	}
+	
+	public PlaylistUpdate(String name,String[] urls,PlaylistVisibility playlistVisibility)
+	{
+		this.urls = Arrays.asList(urls);
+		this.name = name;
+		this.playlistVisibility = playlistVisibility;
+	}
+
 
 	private List<String> urls;
 
