@@ -49,16 +49,19 @@ public class PlaylistDescriptor {
 		switch (playlistVisibility)
 		{
 			case PRIVATE : setPrivatePlaylist(true);
+			break;
 			case PUBLIC_DISPLAYED_ON_PROFILE : 
 			{
 				this.setPrivatePlaylist(false);
 				this.setHideOnProfile(false);
 			}
+			break;
 			case PUBLIC_HIDDEN_ON_PROFILE :
 			{
 				this.setPrivatePlaylist(false);
 				this.setHideOnProfile(true);
 			}
+			break;
 		}
 	}
 
