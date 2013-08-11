@@ -18,7 +18,7 @@ import java.io.Serializable;
 
 import javax.persistence.Embeddable;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * @author Michael Lavelle
  */
